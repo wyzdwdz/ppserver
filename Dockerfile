@@ -9,3 +9,4 @@ RUN make . && make install
 WORKDIR /workspace
 RUN rm -rf ./ppserver /var/cache/apt/archives /var/lib/apt/lists/*
 RUN apt clean
+RUN rm -rf ~/.cache/*
