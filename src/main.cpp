@@ -1,5 +1,3 @@
-#include <filesystem>
-#include <fstream>
 #include <memory>
 #include <string>
 
@@ -13,7 +11,6 @@
 #include "predictor.h"
 
 using namespace boost::interprocess;
-namespace fs = std::filesystem;
 
 class SharedMemory {
     public:
@@ -95,6 +92,8 @@ int main(int argc, char** argv)
 
   while (true)
   {
+    main_logger->info("State number is {}", shm.GetState());
+    
     if (shm.GetState() == 0) {
       continue;
     }
@@ -102,11 +101,11 @@ int main(int argc, char** argv)
     auto num = shm.GetNumber();
     auto data = shm.GetData();
 
-    auto blocks = predictor.Predict(data.data(), num);
-    auto num_blocks = blocks.size() / 9;
+//     auto blocks = predictor.Predict(data.data(), num);
+//     auto num_blocks = blocks.size() / 9;
 
-    shm.SetNumber(num_blocks);
-    shm.SetData(blocks);
-    shm.SetState(0);
+//     shm.SetNumber(num_blocks);
+//     shm.SetData(blocks);
+//     shm.SetState(0);
   }
 }
