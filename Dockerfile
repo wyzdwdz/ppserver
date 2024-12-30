@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorrt:24.06-py3
+FROM nvcr.io/nvidia/tensorrt:24.04-py3
 
 WORKDIR /workspace
 RUN apt update && apt install -y curl zip unzip tar pkg-config
