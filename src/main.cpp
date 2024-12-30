@@ -92,11 +92,11 @@ int main(int argc, char** argv)
 
   while (true)
   {
-    main_logger->info("State number is {}", shm.GetState());
-    
     if (shm.GetState() == 0) {
       continue;
     }
+
+    main_logger->info("State is {}", shm.GetState());
 
     auto num = shm.GetNumber();
     auto data = shm.GetData();
