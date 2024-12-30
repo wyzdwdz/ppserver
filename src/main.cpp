@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 
   while (true)
   {
-    if (shm.GetState() == 0) {
+    while (shm.GetState() == 0) {
       continue;
     }
 
