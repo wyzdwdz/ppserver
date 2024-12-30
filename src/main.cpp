@@ -1,3 +1,5 @@
+#include <filesystem>
+#include <fstream>
 #include <memory>
 #include <string>
 
@@ -11,6 +13,7 @@
 #include "predictor.h"
 
 using namespace boost::interprocess;
+namespace fs = std::filesystem;
 
 class SharedMemory {
     public:
@@ -49,10 +52,10 @@ class SharedMemory {
             std::memcpy(num_, &number, sizeof(number));
         };
 
-        inline std::vector<float> GetData() const {
+        inline std::vector<float> GetData(size_t size) const {
             std::vector<float> data;
-            data.resize(GetNumber());
-            std::memcpy(data.data(), data_, sizeof(float) * GetNumber());
+            data.resize(size);
+            std::memcpy(data.data(), data_, sizeof(float) * size);
             return data;
         };
 
@@ -96,16 +99,16 @@ int main(int argc, char** argv)
       continue;
     }
 
-    main_logger->info("State is {}", shm.GetState());
-
     auto num = shm.GetNumber();
-    auto data = shm.GetData();
+    auto data = shm.GetData(num * 4);
 
-//     auto blocks = predictor.Predict(data.data(), num);
-//     auto num_blocks = blocks.size() / 9;
+    main_logger->info("NUM is {}, DATASIZE is {}", num, data.size());
 
-//     shm.SetNumber(num_blocks);
-//     shm.SetData(blocks);
-//     shm.SetState(0);
+    auto blocks = predictor.Predict(data.data(), num);
+    auto num_blocks = blocks.size() / 9;
+
+    shm.SetNumber(num_blocks);
+    shm.SetData(blocks);
+    shm.SetState(0);
   }
 }
