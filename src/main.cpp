@@ -104,8 +104,6 @@ int main(int argc, char** argv)
     auto num = shm.GetNumber();
     auto data = shm.GetData(num * 4);
 
-    main_logger->info("NUM is {}, DATASIZE is {}", num, data.size());
-
     auto blocks = predictor.Predict(data.data(), num);
     auto num_blocks = blocks.size() / 9;
 
