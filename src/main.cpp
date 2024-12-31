@@ -1,7 +1,7 @@
-#include <filesystem>
-#include <fstream>
 #include <memory>
+#include <chrono>
 #include <string>
+#include <thread>
 
 #include <CLI/App.hpp>
 #include <boost/interprocess/mapped_region.hpp>
@@ -13,7 +13,8 @@
 #include "predictor.h"
 
 using namespace boost::interprocess;
-namespace fs = std::filesystem;
+using namespace std::this_thread;     
+using namespace std::chrono_literals; 
 
 class SharedMemory {
     public:
@@ -95,12 +96,15 @@ int main(int argc, char** argv)
 
   while (true)
   {
-    if (shm.GetState() == 0) {
+    while (shm.GetState() == 0) {
+      sleep_for(10ns);
       continue;
     }
 
     auto num = shm.GetNumber();
     auto data = shm.GetData(num * 4);
+
+    main_logger->info("NUM is {}, DATASIZE is {}", num, data.size());
 
     auto blocks = predictor.Predict(data.data(), num);
     auto num_blocks = blocks.size() / 9;
