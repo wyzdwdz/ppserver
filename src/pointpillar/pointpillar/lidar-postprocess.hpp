@@ -78,11 +78,23 @@ struct PostProcessParameter
   int num_classes = 3;
   int num_anchors = 6;
   int len_per_anchor = 4;
-  float anchors[24] = {
-    3.9, 1.6, 1.56, 0.0,  3.9,  1.6, 1.56, 1.57, 0.8,  0.6, 1.73, 0.0,
-    0.8, 0.6, 1.73, 1.57, 1.76, 0.6, 1.73, 0.0,  1.76, 0.6, 1.73, 1.57,
-  };
-  nvtype::Float3 anchor_bottom_heights{-1.78, -0.6, -0.6};
+
+//  float anchors[24] = {
+//    3.9, 1.6, 1.56, 0.0,  3.9,  1.6, 1.56, 1.57, 0.8,  0.6, 1.73, 0.0,
+//    0.8, 0.6, 1.73, 1.57, 1.76, 0.6, 1.73, 0.0,  1.76, 0.6, 1.73, 1.57,
+//  };
+//  nvtype::Float3 anchor_bottom_heights{-1.78, -0.6, -0.6};
+
+    float anchors[24] = {
+            12.0,4.0,4,0.0,
+            12.0,4.0,4,1.57,
+            2,1.8,0.8,0.0,
+            2,1.8,0.8,1.57,
+            1.5,0.5,0.7,0.0,
+            1.5,0.5,0.7,1.57,
+        };
+    nvtype::Float3 anchor_bottom_heights{-1.78,-1.78,-1.78};
+                                       
   int num_box_values = 7;
   float score_thresh = 0.1;
   float dir_offset = 0.78539;
