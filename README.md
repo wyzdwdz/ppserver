@@ -1,5 +1,7 @@
 # ppserver
 
+Use shared memory on Linux to read point cloud and detect objects by PointPillar.
+
 ## Usage
 
 ```
