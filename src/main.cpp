@@ -10,6 +10,10 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#ifdef __linux__
+#include <sys/stat.h>
+#endif
+
 #include "predictor.h"
 
 using namespace boost::interprocess;
@@ -20,6 +24,11 @@ class SharedMemory {
     public:
         SharedMemory() {
             shm_obj_ = shared_memory_object(open_or_create, "pp_shm", read_write);
+            
+            #ifdef __linux__
+            chmod("/dev/shm/pp_shm", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+            #endif
+            
             offset_t shm_size = 0;
             if (shm_obj_.get_size(shm_size) && shm_size == 0) {
                 shm_obj_.truncate(100 * 1024 * 1024);
