@@ -1,5 +1,7 @@
 #include "predictor.h"
 
+#include <chrono>
+
 void PpPredictor::InitializeCore(const std::string& engine)
 {
   pointpillar::lidar::VoxelizationParameter vp{};
@@ -31,7 +33,14 @@ void PpPredictor::InitializeCore(const std::string& engine)
 
 std::vector<float> PpPredictor::Predict(const float* lidar_points, int num_points)
 {
+  using std::chrono::high_resolution_clock;
+  using std::chrono::duration;
+  
+  auto t1 = high_resolution_clock::now();
   auto bboxes = core_->forward(lidar_points, num_points, stream_);
+  auto t2 = high_resolution_clock::now();
+
+  duration<double, std::milli> time = t2 - t1;
 
   std::vector<float> out;
   out.reserve(bboxes.size() * 9);
@@ -49,7 +58,7 @@ std::vector<float> PpPredictor::Predict(const float* lidar_points, int num_point
     out.emplace_back(bbox.score);
   }
 
-  logger_->info("Predict one frame, get {} boxes", bboxes.size());
+  logger_->info("Predict one frame, get {} boxes, runtime {} ms", bboxes.size(), time.count());
 
   return out;
 }
